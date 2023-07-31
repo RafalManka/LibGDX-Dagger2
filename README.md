@@ -1,1 +1,1 @@
-I invite you to explore my Medium article on LibGDX and Dagger2 integration, which can be found at the following link: https://medium.com/rafalmanka/libgdxdagger2.
+I invite you to explore my Medium article on LibGDX and Dagger2 integration, which can be found at the following link: https://medium.com/@rafal_92329/using-dagger-2-for-dependency-injection-in-a-libgdx-project-78238c39b340.
