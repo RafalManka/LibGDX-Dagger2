@@ -3,7 +3,7 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.mygdx.game.dependencies.Player;
+import com.mygdx.game.dependencies.MapHandler;
 import com.mygdx.game.di.game.GameComponent;
 
 import javax.inject.Inject;
@@ -14,7 +14,7 @@ public class ScreenB extends ScreenAdapter {
     SpriteBatch batch;
 
     @Inject
-    Player player;
+    MapHandler mapHandler;
 
     public ScreenB(GameComponent component) {
         component.screenComponentFactory().create().inject(this);

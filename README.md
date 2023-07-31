@@ -86,7 +86,7 @@ public @interface Screen {
 }
 ```
 
-- Now declare your ScreenModule. I took player as an example of an object that is instantiated
+- Now declare your ScreenModule. I took mapHandler as an example of an object that is instantiated
 once per every screen, but depending on you requirements this can be something else entirely.
 ```java
 @Module
@@ -94,9 +94,101 @@ public class ScreenModule {
 
     @Screen
     @Provides
-    public Player providePlayer() {
-        return new Player();
+    public MapHandler provideMapHandler() {
+        return new MapHandler();
     }
+
+}
+```
+
+Now lets have a look at our game class. inside your create method make a new instance of your 
+GameComponent. This is also the correct place to inject all of your game dependencies, so call the 
+inject method as well. 
+```java
+public class DaggerGame extends Game {
+
+    private GameComponent gameComponent;
+
+    @Inject
+    SpriteBatch batch;
+
+    protected boolean isA = false;
+
+    @Override
+    public void create() {
+        gameComponent = DaggerGameComponent.create();
+        gameComponent.inject(this);
+        changeScreen();
+    }
+
+    @Override
+    public void render() {
+        super.render();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
+            changeScreen();
+        }
+    }
+
+    private void changeScreen() {
+        if (isA) {
+            setScreen(new ScreenB(gameComponent));
+        } else {
+            setScreen(new ScreenA(gameComponent));
+        }
+        isA = !isA;
+    }
+}
+```
+
+Finally lets look at our Screens. ScreenA and ScreenB respectfully. In both of the screens we are
+passing the GameComponent in a constructor, from which we are creating a new instance of 
+subcomponent which then we use to inject our dependencies. because SpriteBatch and Player 
+dependencies are declared with different scopes, the same instance of SpriteBatch will
+be injected in Game and both of the screens. But the new mapHandler instance will be created once per 
+each screen.
+```java
+public class ScreenA extends ScreenAdapter {
+
+    @Inject
+    SpriteBatch batch;
+
+    @Inject
+    MapHandler mapHandler;
+
+    public ScreenA(GameComponent component) {
+        component.screenComponentFactory().create().inject(this);
+    }
+
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+        ScreenUtils.clear(0, 1, 0, 1);
+    }
+}
+
+public class ScreenB extends ScreenAdapter {
+
+    @Inject
+    SpriteBatch batch;
+
+    @Inject
+    MapHandler mapHandler;
+
+    public ScreenB(GameComponent component) {
+        component.screenComponentFactory().create().inject(this);
+    }
+
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+        ScreenUtils.clear(1, 0, 0, 1);
+    }
+}
+```
+
+the MapHandler class in empty and it's here just as an example
+```java
+public class MapHandler {
 
 }
 ```
