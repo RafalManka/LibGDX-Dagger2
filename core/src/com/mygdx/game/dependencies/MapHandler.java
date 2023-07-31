@@ -1,5 +1,5 @@
 package com.mygdx.game.dependencies;
 
-public class Player {
+public class MapHandler {
 
 }

@@ -1,6 +1,6 @@
 package com.mygdx.game.di.screen;
 
-import com.mygdx.game.dependencies.Player;
+import com.mygdx.game.dependencies.MapHandler;
 
 import dagger.Module;
 import dagger.Provides;
@@ -10,8 +10,8 @@ public class ScreenModule {
 
     @Screen
     @Provides
-    public Player providePlayer() {
-        return new Player();
+    public MapHandler provideMapHandler() {
+        return new MapHandler();
     }
 
 }

@@ -3,9 +3,11 @@ package com.mygdx.game.di.game;
 import com.mygdx.game.DaggerGame;
 import com.mygdx.game.di.screen.ScreenComponent;
 
+import javax.inject.Singleton;
+
 import dagger.Component;
 
-@Game
+@Singleton
 @Component(modules = {
         GameModule.class
 })
