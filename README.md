@@ -1,5 +1,11 @@
 # Using Dagger 2 for dependency injection in a LibGDX project
-This article describes how to implement dependency injection using Dagger 2 in a LibGDX project.
+As software grows in size and complexity, the need for managing dependencies between objects and 
+classes effectively becomes increasingly critical. Dagger2, a fully static, compile-time dependency 
+injection framework, has emerged as one of the top choices in the Android world for this purpose. 
+In this article, we will explore how to utilize Dagger2 within a LibGDX game project.
+
+Before we start, it's important to understand what LibGDX and Dagger2 are, and why we might want to 
+use them together.
 
 # How Dagger 2 works
 Dagger 2 consists of the following building blocks
@@ -20,11 +26,23 @@ will be only created once per the entire game.
 This annotation we need to create ourselves. Together with @Subcomponent annotation we ensure that 
 all dependencies annotated with it will be created once per screen.
 
+
+## Let's Dive In: Integrating Dagger2 into a LibGDX Project
+Add Dagger2 Dependency
+To begin, we need to add the Dagger2 library to our LibGDX project's Gradle build file. Add the 
+following lines to your project's build.gradle file in the "core" project block:
+```groovy
+dependencies {
+    implementation 'com.google.dagger:dagger:2.45'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.45'
+}
+```
 # Using Dagger2 in your project
-Create a Module. Notice we are annotating provide method with @Provides annotation and @Singleton 
-annotations. That means this methos will be used to create instance of SpriteBatch and it will be 
-created once per the whole game. After it is created it will be stored by dagger internally and 
-reused making sure that you will use the same instance of SpriteBatch in all places in your code 
+Begin by creating a Module. Take note that the provision method is annotated with both @Provides and 
+@Singleton annotations. This signifies that this method will be used to generate a SpriteBatch 
+instance, and this creation will only occur once throughout the entire game. Once created, Dagger 
+will internally store and subsequently reuse this instance, ensuring that the same SpriteBatch 
+instance is utilized consistently throughout your code.
 ```java
 @Module
 public class GameModule {
@@ -36,12 +54,12 @@ public class GameModule {
     }
 }
 ```
-Create a component. In order for any of the modules to be able to use @Singleton annotation you 
-need to annotate your component with that annotation as well. This is how you declare a scope. Next,
-declare all your modules inside the @Component annotation. Create inject method that takes the Game
-as a parameter, this will allow us to pass our game object to dagger so it can fulfill all our
-dependencies. Create factory method that returns ScreenComponent.Factory, we will create this class 
-in a moment.
+Create a component. To enable any of the modules to use the @Singleton annotation, your component 
+must be annotated with the same. This is how you declare a scope. Subsequently, declare all your 
+modules within the @Component annotation. Proceed to create an injection method that accepts 'Game' 
+as a parameter, which will allow us to provide our game object to Dagger for the fulfillment of all 
+our dependencies. Generate a factory method that returns a ScreenComponent.Factory instance. We 
+will create this class shortly.
 ```java
 @Singleton
 @Component(modules = {
