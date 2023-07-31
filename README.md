@@ -21,7 +21,7 @@ This annotation we need to create ourselves. Together with @Subcomponent annotat
 all dependencies annotated with it will be created once per screen.
 
 # Using Dagger2 in your project
-- Create a Module. Notice we are annotating provide method with @Provides annotation and @Singleton 
+Create a Module. Notice we are annotating provide method with @Provides annotation and @Singleton 
 annotations. That means this methos will be used to create instance of SpriteBatch and it will be 
 created once per the whole game. After it is created it will be stored by dagger internally and 
 reused making sure that you will use the same instance of SpriteBatch in all places in your code 
@@ -36,14 +36,12 @@ public class GameModule {
     }
 }
 ```
-
-- Create a component. In order for any of the modules to be able to use @Singleton annotation you 
+Create a component. In order for any of the modules to be able to use @Singleton annotation you 
 need to annotate your component with that annotation as well. This is how you declare a scope. Next,
 declare all your modules inside the @Component annotation. Create inject method that takes the Game
 as a parameter, this will allow us to pass our game object to dagger so it can fulfill all our
 dependencies. Create factory method that returns ScreenComponent.Factory, we will create this class 
 in a moment.
-
 ```java
 @Singleton
 @Component(modules = {
@@ -55,8 +53,7 @@ public interface GameComponent {
     ScreenComponent.Factory screenComponentFactory();
 }
 ```
-
-- Create a subcomponent. Annotate the interface with @Screen annotation which we will create in a 
+Create a subcomponent. Annotate the interface with @Screen annotation which we will create in a 
 second. Declare all your modules inside @Subcomponent annotation. create inject method for every 
 screen and create @subcomponent.Factory interface.
 ```java
@@ -75,8 +72,7 @@ public interface ScreenComponent {
     }
 }
 ```
-
-- Create a @Screen annotation. This will allow us to declare a scope and make sure that all 
+Create a @Screen annotation. This will allow us to declare a scope and make sure that all 
 dependencies annotated with it will be instantiated once per screen.
 ```java
 @Scope
@@ -85,8 +81,7 @@ dependencies annotated with it will be instantiated once per screen.
 public @interface Screen {
 }
 ```
-
-- Now declare your ScreenModule. I took mapHandler as an example of an object that is instantiated
+Now declare your ScreenModule. I took mapHandler as an example of an object that is instantiated
 once per every screen, but depending on you requirements this can be something else entirely.
 ```java
 @Module
@@ -100,10 +95,9 @@ public class ScreenModule {
 
 }
 ```
-
-Now lets have a look at our game class. inside your create method make a new instance of your 
+Now lets have a look at our game class. Inside your create method make a new instance of your 
 GameComponent. This is also the correct place to inject all of your game dependencies, so call the 
-inject method as well. 
+inject method as well. the rest of the code is self explanatory.
 ```java
 public class DaggerGame extends Game {
 
@@ -139,7 +133,6 @@ public class DaggerGame extends Game {
     }
 }
 ```
-
 Finally lets look at our Screens. ScreenA and ScreenB respectfully. In both of the screens we are
 passing the GameComponent in a constructor, from which we are creating a new instance of 
 subcomponent which then we use to inject our dependencies. because SpriteBatch and Player 
@@ -185,7 +178,6 @@ public class ScreenB extends ScreenAdapter {
     }
 }
 ```
-
 the MapHandler class in empty and it's here just as an example
 ```java
 public class MapHandler {
